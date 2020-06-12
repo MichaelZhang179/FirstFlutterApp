@@ -26,6 +26,10 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      //注册路由表
+      routes:{
+        "new_page":(context) => NewRoute(),
+      } ,
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -104,9 +108,38 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
-          ],
+
+//            FlatButton(
+//              child: Text("open new route"),
+//              textColor: Colors.blue,
+//              onPressed: () {
+//                //导航到新路由
+//                Navigator.push(context,
+//                    MaterialPageRoute(builder: (context) {
+//                      return RouterTestRoute();
+//                    }));
+//              },
+//            ),
+//          ],
+//        ),
+
+        FlatButton(
+          child: Text("open new route"),
+          textColor: Colors.blue,
+          onPressed: () {
+            //导航到新路由
+            Navigator.pushNamed(context, "new_page");
+
+//            Navigator.push(context,
+//                MaterialPageRoute(builder: (context) {
+//                  return NewRoute();
+//                }));
+          },
         ),
+        ],
       ),
+
+    ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
@@ -115,3 +148,77 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+
+class NewRoute extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("New Route !"),
+      ),
+      body: Center(
+        child: Text("This is a new Route !!"),
+      ),
+    );
+  }
+}
+
+class RouterTestRoute extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: RaisedButton(
+        onPressed: () async {
+          // 打开`TipRoute`，并等待返回结果
+          var result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return TipRoute(
+                  // 路由参数
+                  text: "我是提示xxxx",
+                );
+              },
+            ),
+          );
+          //输出`TipRoute`路由返回结果
+          print("路由返回值1: $result");
+        },
+        child: Text("打开提示页"),
+      ),
+    );
+  }
+}
+
+class TipRoute extends StatelessWidget {
+  TipRoute({
+    Key key,
+    @required this.text,  // 接收一个text参数
+  }) : super(key: key);
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("提示"),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(18),
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              Text(text),
+              RaisedButton(
+                onPressed: () => Navigator.pop(context, "我是返回值ss"),
+                child: Text("返回"),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
